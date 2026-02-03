@@ -148,7 +148,7 @@ import { OrdersService } from '../../core/services/orders.service';
 
           <div *ngIf="checkoutResult()" class="alert alert-success mt-3">
             <div class="fw-semibold">Checkout successful ✅</div>
-            <div class="small text-muted">Redirecting to My Orders...</div>
+            <div class="small text-muted">Redirecting to payment...</div>
           </div>
         </div>
       </div>
@@ -266,8 +266,16 @@ export class CartPage {
         this.items.set([]);
         this.busy.set(false);
 
-        // Redirect to orders page after a moment
-        setTimeout(() => this.router.navigateByUrl('/orders'), 800);
+        // Get order ID from response
+        const orderId = res?.order?.orderId;
+
+        if (orderId) {
+          // Redirect to payment page with order ID
+          setTimeout(() => this.router.navigate(['/payment', orderId]), 800);
+        } else {
+          // Fallback to orders page if no order ID
+          setTimeout(() => this.router.navigateByUrl('/orders'), 800);
+        }
       },
       error: (e) => {
         this.busy.set(false);
