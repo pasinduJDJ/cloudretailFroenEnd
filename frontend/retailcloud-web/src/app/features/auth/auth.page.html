@@ -1,0 +1,108 @@
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-xl-5">
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="text-center mb-4">
+                        <div class="display-6 fw-bold">{{ isLoginMode() ? 'Welcome Back' : 'Create Account' }}</div>
+                        <div class="text-muted">
+                            {{ isLoginMode() ? 'Login to your account' : 'Register a new account' }}
+                        </div>
+                    </div>
+
+                    <!-- Success Message -->
+                    @if (successMessage()) {
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <i class="bi bi-check-circle me-2"></i>
+                        {{ successMessage() }}
+                        <button type="button" class="btn-close" (click)="successMessage.set('')"></button>
+                    </div>
+                    }
+
+                    <!-- Error Message -->
+                    @if (errorMessage()) {
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        {{ errorMessage() }}
+                        <button type="button" class="btn-close" (click)="errorMessage.set('')"></button>
+                    </div>
+                    }
+
+                    <!-- Confirmation Code Form (After Registration) -->
+                    @if (needsConfirmation()) {
+                    <div class="alert alert-info mb-4">
+                        <i class="bi bi-envelope me-2"></i>
+                        Check your email for the confirmation code!
+                    </div>
+
+                    <form (ngSubmit)="confirmEmail()">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" [(ngModel)]="email" name="email" readonly required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Confirmation Code</label>
+                            <input type="text" class="form-control" [(ngModel)]="confirmationCode" name="code"
+                                placeholder="Enter 6-digit code" required>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg" [disabled]="loading()">
+                                @if (loading()) {
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+                                }
+                                Confirm Email
+                            </button>
+                        </div>
+                    </form>
+
+                    } @else {
+                    <!-- Login/Register Form -->
+                    <form (ngSubmit)="isLoginMode() ? login() : register()">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" [(ngModel)]="email" name="email"
+                                placeholder="your@email.com" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" [(ngModel)]="password" name="password"
+                                placeholder="Enter password" required>
+                            @if (!isLoginMode()) {
+                            <div class="form-text">
+                                Min 8 characters, with uppercase, lowercase, number & special char
+                            </div>
+                            }
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-dark btn-lg" [disabled]="loading()">
+                                @if (loading()) {
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+                                }
+                                @if (isLoginMode()) {
+                                Login
+                                } @else {
+                                Register
+                                }
+                            </button>
+
+                            <button type="button" class="btn btn-outline-dark" (click)="toggleMode()"
+                                [disabled]="loading()">
+                                {{ isLoginMode() ? 'Need an account? Register' : 'Have an account? Login' }}
+                            </button>
+                        </div>
+                    </form>
+                    }
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

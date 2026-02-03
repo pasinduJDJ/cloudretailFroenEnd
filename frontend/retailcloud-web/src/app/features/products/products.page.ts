@@ -41,7 +41,6 @@ export class ProductsPage {
 
     this.productsService.list().subscribe({
       next: (res) => {
-        // Support multiple response shapes
         const list =
           Array.isArray(res) ? res :
             Array.isArray((res as any)?.items) ? (res as any).items :
@@ -71,12 +70,11 @@ export class ProductsPage {
     this.error.set(null);
     this.toast.set(null);
 
-    // Default qty = 1 for fast demo
     this.cart.addItem(String(productId), 1, price).subscribe({
       next: () => {
         this.adding.set(false);
-        this.toast.set(`Added ${product?.name || product?.title || productId} to cart ✅`);
-        // auto-hide toast
+        this.toast.set(`Added ${product?.name || product?.title || productId} to cart`);
+
         setTimeout(() => this.toast.set(null), 2500);
       },
       error: (e) => {

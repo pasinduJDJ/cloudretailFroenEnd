@@ -36,19 +36,15 @@ export interface ConfirmResponse {
 export class AuthService {
     private readonly API_URL = environment.apiUrl || 'https://bizvx23zvj.execute-api.ap-southeast-1.amazonaws.com/dev';
 
-    // Reactive signals - initialized in constructor
     isLoggedIn = signal<boolean>(false);
     currentUser = signal<UserInfo | null>(null);
 
     constructor(private http: HttpClient) {
-        // Initialize signals after constructor
         this.isLoggedIn.set(this.hasValidToken());
         this.currentUser.set(this.getUserFromToken());
     }
 
-    /**
-     * Decode JWT token to extract user information
-     */
+
     private decodeToken(token: string): UserInfo | null {
         try {
             const base64Url = token.split('.')[1];
@@ -68,16 +64,13 @@ export class AuthService {
         }
     }
 
-    /**
-     * Register a new user
-     */
     async register(email: string, password: string): Promise<RegisterResponse> {
         try {
             const url = `${this.API_URL}/auth/register`;
             const body = { email, password };
 
-            console.log('📝 Attempting registration to:', url);
-            console.log('📦 Request body:', body);
+            console.log('Attempting registration to:', url);
+            console.log('Request body:', body);
 
             const response = await firstValueFrom(
                 this.http.post<RegisterResponse>(url, body, {
@@ -87,15 +80,14 @@ export class AuthService {
                 })
             );
 
-            console.log('✅ Registration response:', response);
+            console.log('Registration response:', response);
             return response;
         } catch (error: any) {
-            console.error('❌ Registration failed - Full error:', error);
-            console.error('❌ Error status:', error?.status);
-            console.error('❌ Error message:', error?.message);
-            console.error('❌ Error details:', error?.error);
+            console.error('Registration failed - Full error:', error);
+            console.error('Error status:', error?.status);
+            console.error('Error message:', error?.message);
+            console.error('Error details:', error?.error);
 
-            // Re-throw with better error message
             throw {
                 message: error?.error?.message || error?.message || 'Registration failed',
                 error: error?.error?.error || 'Unknown error',
@@ -104,9 +96,6 @@ export class AuthService {
         }
     }
 
-    /**
-     * Confirm email with verification code
-     */
     async confirmEmail(email: string, code: string): Promise<ConfirmResponse> {
         const url = `${this.API_URL}/auth/confirm`;
         const body = { email, code };
@@ -118,16 +107,14 @@ export class AuthService {
         return response;
     }
 
-    /**
-     * Login with email and password
-     */
+
     async login(email: string, password: string): Promise<{ success: boolean; userInfo: UserInfo | null; error?: string }> {
         try {
             const url = `${this.API_URL}/auth/login`;
             const body = { email, password };
 
-            console.log('🔐 Attempting login to:', url);
-            console.log('📦 Request body:', body);
+            console.log('Attempting login to:', url);
+            console.log('Request body:', body);
 
             const response = await firstValueFrom(
                 this.http.post<LoginResponse>(url, body, {
@@ -137,15 +124,13 @@ export class AuthService {
                 })
             );
 
-            console.log('📥 Response received:', response);
+            console.log('Response received:', response);
 
             if (response.tokens) {
-                // Store tokens
                 localStorage.setItem('accessToken', response.tokens.accessToken);
                 localStorage.setItem('idToken', response.tokens.idToken);
                 localStorage.setItem('refreshToken', response.tokens.refreshToken);
 
-                // Decode idToken to get user info (NO API CALL NEEDED!)
                 const userInfo = this.decodeToken(response.tokens.idToken);
 
                 if (userInfo) {
@@ -153,17 +138,17 @@ export class AuthService {
                     this.currentUser.set(userInfo);
                     this.isLoggedIn.set(true);
 
-                    console.log('✅ Login successful:', userInfo);
+                    console.log('Login successful:', userInfo);
                     return { success: true, userInfo };
                 }
             }
 
             return { success: false, userInfo: null, error: 'Failed to decode user info' };
         } catch (error: any) {
-            console.error('❌ Login failed - Full error:', error);
-            console.error('❌ Error status:', error?.status);
-            console.error('❌ Error message:', error?.message);
-            console.error('❌ Error details:', error?.error);
+            console.error('Login failed - Full error:', error);
+            console.error('Error status:', error?.status);
+            console.error('Error message:', error?.message);
+            console.error('Error details:', error?.error);
 
             return {
                 success: false,
@@ -173,9 +158,7 @@ export class AuthService {
         }
     }
 
-    /**
-     * Logout user
-     */
+
     async logout() {
         try {
             const url = `${this.API_URL}/auth/logout`;
@@ -186,7 +169,6 @@ export class AuthService {
         } catch (error) {
             console.error('Logout API call failed:', error);
         } finally {
-            // Clear tokens regardless of API call success
             localStorage.removeItem('accessToken');
             localStorage.removeItem('idToken');
             localStorage.removeItem('refreshToken');
@@ -195,37 +177,27 @@ export class AuthService {
             this.currentUser.set(null);
             this.isLoggedIn.set(false);
 
-            console.log('✅ Logged out successfully');
+            console.log('Logged out successfully');
         }
     }
 
-    /**
-     * Get current user info from stored token (no API call!)
-     */
     getCurrentUser(): UserInfo | null {
         return this.getUserFromToken();
     }
 
-    /**
-     * Get access token for API calls
-     */
+
     getAccessToken(): string | null {
         return localStorage.getItem('accessToken');
     }
 
-    /**
-     * Get ID token
-     */
     getIdToken(): string | null {
         return localStorage.getItem('idToken');
     }
 
-    /**
-     * Set token (for backward compatibility with Cognito Hosted UI callback)
-     */
+
     setToken(token: string) {
         localStorage.setItem('idToken', token);
-        localStorage.setItem('accessToken', token); // Use same token for both
+        localStorage.setItem('accessToken', token);
 
         const userInfo = this.decodeToken(token);
         if (userInfo) {
@@ -236,9 +208,7 @@ export class AuthService {
         this.isLoggedIn.set(true);
     }
 
-    /**
-     * Check if user has valid token
-     */
+
     private hasValidToken(): boolean {
         const token = localStorage.getItem('idToken');
         if (!token) return false;
@@ -246,12 +216,9 @@ export class AuthService {
         const userInfo = this.decodeToken(token);
         if (!userInfo) return false;
 
-        // Check if token is expired
         const exp = userInfo['exp'];
         if (exp && exp * 1000 < Date.now()) {
-            console.log('⚠️ Token expired');
-            // Don't call logout() here to avoid circular dependency during initialization
-            // Just clear the tokens silently
+            console.log('Token expired');
             localStorage.removeItem('accessToken');
             localStorage.removeItem('idToken');
             localStorage.removeItem('refreshToken');
@@ -262,9 +229,6 @@ export class AuthService {
         return true;
     }
 
-    /**
-     * Get user info from stored token
-     */
     private getUserFromToken(): UserInfo | null {
         const token = localStorage.getItem('idToken');
         if (!token) return null;
@@ -272,7 +236,6 @@ export class AuthService {
         const userInfo = this.decodeToken(token);
         if (!userInfo) return null;
 
-        // Check if token is expired
         const exp = userInfo['exp'];
         if (exp && exp * 1000 < Date.now()) {
             return null;
@@ -281,9 +244,7 @@ export class AuthService {
         return userInfo;
     }
 
-    /**
-     * Check if token is expired
-     */
+
     isTokenExpired(): boolean {
         const idToken = this.getIdToken();
         if (!idToken) return true;

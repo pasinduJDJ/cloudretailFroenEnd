@@ -13,13 +13,11 @@ import { AuthService } from '../../core/services/auth.service';
 export class NavbarComponent implements OnInit {
     cartCount = signal<number>(0);
 
-    // Manual toggle for mobile menu
     isMenuCollapsed = signal<boolean>(true);
 
     constructor(private router: Router, private cart: CartService, public auth: AuthService) { }
 
     ngOnInit() {
-        // Subscribe to cart count changes for real-time updates
         this.cart.cartCount$.subscribe(count => {
             this.cartCount.set(count);
         });
@@ -30,7 +28,6 @@ export class NavbarComponent implements OnInit {
     }
 
     toggleSearch() {
-        // Navigate to products page with search functionality
         this.router.navigate(['/products']);
     }
 }

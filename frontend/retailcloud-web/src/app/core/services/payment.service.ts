@@ -38,26 +38,19 @@ export class PaymentService {
 
     constructor(private http: HttpClient) { }
 
-    /**
-     * Process payment for an order (Cash on Delivery)
-     * Always sends status: SUCCESS for cash payments
-     */
     processPayment(orderId: string): Observable<PaymentResponse> {
         const url = `${this.API_URL}/payments`;
         const body: PaymentRequest = {
             orderId,
-            status: 'SUCCESS' // Always SUCCESS for cash payments
+            status: 'SUCCESS'
         };
 
-        console.log('💳 Processing payment for order:', orderId);
-        console.log('📦 Payment request:', body);
+        console.log('Processing payment for order:', orderId);
+        console.log('Payment request:', body);
 
         return this.http.post<PaymentResponse>(url, body);
     }
 
-    /**
-     * Get payment details by payment ID (optional, for future use)
-     */
     getPayment(paymentId: string): Observable<any> {
         const url = `${this.API_URL}/payments/${paymentId}`;
         return this.http.get(url);

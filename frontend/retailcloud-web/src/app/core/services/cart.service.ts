@@ -5,12 +5,10 @@ import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
-    // Observable cart count for reactive UI updates
     private cartCountSubject = new BehaviorSubject<number>(0);
     public cartCount$ = this.cartCountSubject.asObservable();
 
     constructor(private api: ApiClient) {
-        // Load initial cart count
         this.refreshCartCount();
     }
 
@@ -36,7 +34,6 @@ export class CartService {
         );
     }
 
-    // Refresh cart count from API
     refreshCartCount(userId = environment.demoUserId) {
         this.getCart(userId).subscribe({
             next: (res) => {
@@ -58,7 +55,6 @@ export class CartService {
         });
     }
 
-    // UI helper: "update qty" via remove + add (because no PUT endpoint)
     async updateQty(removeFirst: () => Promise<any>, addAgain: () => Promise<any>) {
         await removeFirst();
         await addAgain();

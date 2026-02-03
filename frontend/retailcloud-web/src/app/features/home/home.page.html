@@ -1,0 +1,265 @@
+<!-- Payment Success Alert -->
+@if (paymentSuccess()) {
+<div class="alert alert-success alert-dismissible fade show mb-4">
+    <h5 class="alert-heading">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        Payment Successful!
+    </h5>
+    <p class="mb-2">Your order has been confirmed and will be delivered soon.</p>
+    <p class="mb-0 small">
+        <strong>Order ID:</strong> <code>{{ orderId() }}</code>
+    </p>
+    <button type="button" class="btn-close" (click)="dismissAlert()"></button>
+</div>
+}
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold mb-4">Welcome to CloudRetail</h1>
+                <p class="lead mb-4">
+                    A rapidly growing global e-commerce platform handling millions of customers worldwide.
+                    Experience the future of serverless microservices architecture.
+                </p>
+                <div class="d-flex gap-3 mb-4">
+                    <a class="btn btn-warning btn-lg px-4" routerLink="/products">
+                        Shop Now
+                    </a>
+                    <a class="btn btn-outline-light btn-lg px-4" routerLink="/auth">
+                        Get Started
+                    </a>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge bg-light text-dark">24/7 Availability</span>
+                    <span class="badge bg-light text-dark">Real-time Updates</span>
+                    <span class="badge bg-light text-dark">Secure & Scalable</span>
+                    <span class="badge bg-light text-dark">Global Platform</span>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center mt-4 mt-lg-0">
+                <div class="stat-card">
+                    <h2 class="display-3 fw-bold mb-2">∞</h2>
+                    <h5 class="fw-bold">Unlimited Scalability</h5>
+                    <p class="mb-0">Powered by AWS Serverless</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- About CloudRetail -->
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <h2 class="fw-bold mb-4 text-center">About CloudRetail</h2>
+                    <p class="lead text-muted mb-4">
+                        You are part of an advanced software architecture team at CloudRetail, a rapidly growing global
+                        e-commerce platform. CloudRetail handles millions of customers worldwide and offers both
+                        physical products and digital services.
+                    </p>
+                    <p class="text-muted mb-4">
+                        As CloudRetail continues to scale, we are facing challenges related to high availability, fault
+                        tolerance, real-time data synchronization, and global scaling. Currently, CloudRetail operates
+                        on a monolithic architecture, but to support future growth and operational efficiency, the
+                        company is transitioning to a <strong>microservices-based architecture</strong> running on
+                        cloud-native infrastructure.
+                    </p>
+                    <p class="text-muted mb-0">
+                        This requires integrating cloud services with distributed applications, utilizing APIs to ensure
+                        seamless communication between microservices and external systems. CloudRetail aims to create a
+                        highly resilient and scalable platform that ensures 24/7 availability, supports real-time data
+                        updates, and integrates with third-party APIs. The system needs to be secure, compliant with
+                        data protection regulations (e.g., GDPR), and capable of handling millions of transactions daily
+                        without compromising performance.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Features -->
+<div class="container mb-5">
+    <h2 class="fw-bold text-center mb-5">Our Architecture Highlights</h2>
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="card feature-card border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="display-4 mb-3">🚀</div>
+                    <h5 class="fw-bold mb-3">High Availability</h5>
+                    <p class="text-muted small mb-0">
+                        99.99% uptime with multi-AZ deployment and automatic failover mechanisms
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card feature-card border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="display-4 mb-3">⚡</div>
+                    <h5 class="fw-bold mb-3">Real-time Sync</h5>
+                    <p class="text-muted small mb-0">
+                        Instant data synchronization across all microservices using event-driven architecture
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card feature-card border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="display-4 mb-3">🔒</div>
+                    <h5 class="fw-bold mb-3">Secure & Compliant</h5>
+                    <p class="text-muted small mb-0">
+                        GDPR compliant with AWS Cognito authentication and encrypted data storage
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card feature-card border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="display-4 mb-3">📈</div>
+                    <h5 class="fw-bold mb-3">Auto-Scaling</h5>
+                    <p class="text-muted small mb-0">
+                        Handles millions of transactions daily with serverless auto-scaling capabilities
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Technology Stack -->
+<div class="container mb-5">
+    <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+        <div class="card-body p-4 p-md-5">
+            <h3 class="fw-bold mb-4 text-center">Powered by AWS Serverless</h3>
+            <div class="row g-3 text-center">
+                <div class="col-6 col-md-3">
+                    <div class="p-3 bg-white rounded-3 shadow-sm">
+                        <div class="fw-bold">Lambda</div>
+                        <div class="small text-muted">Compute</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="p-3 bg-white rounded-3 shadow-sm">
+                        <div class="fw-bold">API Gateway</div>
+                        <div class="small text-muted">REST API</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="p-3 bg-white rounded-3 shadow-sm">
+                        <div class="fw-bold">DynamoDB</div>
+                        <div class="small text-muted">Database</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="p-3 bg-white rounded-3 shadow-sm">
+                        <div class="fw-bold">Cognito</div>
+                        <div class="small text-muted">Auth</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="p-3 bg-white rounded-3 shadow-sm">
+                        <div class="fw-bold">S3</div>
+                        <div class="small text-muted">Storage</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="p-3 bg-white rounded-3 shadow-sm">
+                        <div class="fw-bold">SES</div>
+                        <div class="small text-muted">Email</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="p-3 bg-white rounded-3 shadow-sm">
+                        <div class="fw-bold">CloudWatch</div>
+                        <div class="small text-muted">Monitoring</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="p-3 bg-white rounded-3 shadow-sm">
+                        <div class="fw-bold">IAM</div>
+                        <div class="small text-muted">Security</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Products -->
+<div class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">Featured Products</h2>
+        <a class="btn btn-outline-dark" routerLink="/products">View All</a>
+    </div>
+
+    @if (loading()) {
+    <div class="text-center py-5">
+        <div class="spinner-border" role="status"></div>
+        <div class="mt-3 text-muted">Loading products...</div>
+    </div>
+    }
+
+    @if (!loading() && featuredProducts().length > 0) {
+    <div class="row g-4">
+        @for (product of featuredProducts(); track product.productId) {
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card product-card border-0 shadow-sm h-100">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        @if (product.imageUrl) {
+                        <img [src]="product.imageUrl" [alt]="product.name" class="img-fluid"
+                            style="max-height: 150px; object-fit: contain;">
+                        } @else {
+                        <div class="bg-light rounded-3 d-flex align-items-center justify-content-center"
+                            style="height: 150px;">
+                            <i class="bi bi-box-seam fs-1 text-muted"></i>
+                        </div>
+                        }
+                    </div>
+                    <h6 class="fw-bold mb-2">{{ product.name || product.title }}</h6>
+                    <div class="text-primary fw-bold mb-3">${{ product.price }}</div>
+                    <a class="btn btn-dark btn-sm w-100" routerLink="/products">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    }
+
+    @if (!loading() && featuredProducts().length === 0) {
+    <div class="text-center py-5 text-muted">
+        <i class="bi bi-box-seam fs-1"></i>
+        <div class="mt-2">No products available</div>
+    </div>
+    }
+</div>
+
+<!-- Call to Action -->
+<div class="container mb-5">
+    <div class="card border-0 shadow-sm text-center"
+        style="background: linear-gradient(135deg, #001D3D 0%, #003566 100%); color: white;">
+        <div class="card-body p-5">
+            <h2 class="fw-bold mb-3">Ready to Experience CloudRetail?</h2>
+            <p class="lead mb-4">
+                Join millions of customers worldwide on our serverless e-commerce platform
+            </p>
+            <div class="d-flex gap-3 justify-content-center">
+                <a class="btn btn-warning btn-lg px-4" routerLink="/products">
+                    Start Shopping
+                </a>
+                <a class="btn btn-outline-light btn-lg px-4" routerLink="/auth">
+                    Create Account
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

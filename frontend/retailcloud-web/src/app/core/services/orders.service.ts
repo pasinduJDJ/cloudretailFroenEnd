@@ -11,13 +11,11 @@ export class OrdersService {
     ) { }
 
     checkout(userId = environment.demoUserId) {
-        // Get user email from auth service
         const userInfo = this.auth.getCurrentUser();
-        const email = userInfo?.email || 'jdipasindudulanjana@gmail.com'; // Fallback to verified email
+        const email = userInfo?.email || 'pasindudulanjanarj@gmail.com';
 
-        console.log('🛒 Checkout with email:', email);
+        console.log('Checkout with email:', email);
 
-        // Pass email in request body
         return this.api.post<any>('/orders/checkout', { email }, { userId });
     }
 

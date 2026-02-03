@@ -1,18 +1,14 @@
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top pt-3 pb-3" style="background-color: #001D3D;">
     <div class="container">
-        <!-- Logo (Left) -->
         <a class="navbar-brand fw-bold" routerLink="/">
             RetailCloud
         </a>
 
-        <!-- Mobile Toggle Button -->
         <button class="navbar-toggler" type="button" (click)="toggleMenu()" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Collapsible Content -->
         <div [ngClass]="{'collapse': true, 'navbar-collapse': true, 'show': !isMenuCollapsed()}" id="navbarContent">
-            <!-- Center: Menu Items -->
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
                     <a class="nav-link fw-light" routerLink="/" routerLinkActive="active"
@@ -21,19 +17,14 @@
                 <li class="nav-item">
                     <a class="nav-link fw-light" routerLink="/products" routerLinkActive="active">Products</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link fw-light" routerLink="/orders" routerLinkActive="active">My Orders</a>
-                </li>
+
             </ul>
 
-            <!-- Right: Search, Cart, Account -->
             <div class="d-flex align-items-center gap-2">
-                <!-- Search Icon -->
                 <button class="btn btn-outline-light" (click)="toggleSearch()" type="button">
                     <i class="bi bi-search"></i>
                 </button>
 
-                <!-- Cart -->
                 <a class="btn btn-outline-light position-relative" routerLink="/cart">
                     <i class="bi bi-cart3"></i>
                     <span
@@ -43,13 +34,12 @@
                     </span>
                 </a>
 
-                <!-- My Account -->
                 <a *ngIf="!auth.isLoggedIn()" class="btn btn-warning" routerLink="/auth">
-                    <i class="bi bi-person-circle me-1"></i> Login
+                    Login
                 </a>
 
                 <button *ngIf="auth.isLoggedIn()" class="btn btn-warning" (click)="auth.logout()">
-                    <i class="bi bi-box-arrow-right me-1"></i> Logout
+                    Logout
                 </button>
             </div>
         </div>

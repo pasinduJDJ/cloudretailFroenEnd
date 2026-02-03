@@ -1,10 +1,8 @@
 <div class="container py-4">
-    <!-- Centered Search Bar -->
     <div class="d-flex justify-content-center mb-4">
         <input class="form-control" style="max-width: 500px" placeholder="Search products..." [(ngModel)]="query" />
     </div>
 
-    <!-- Alerts -->
     <div *ngIf="error()" class="alert alert-danger">
         <strong>Error:</strong> {{ error() }}
     </div>
@@ -13,19 +11,16 @@
         {{ toast() }}
     </div>
 
-    <!-- Loading -->
     <div *ngIf="loading()" class="py-5 text-center text-muted">
         <div class="spinner-border" role="status"></div>
         <div class="mt-3">Loading products...</div>
     </div>
 
-    <!-- Empty -->
     <div *ngIf="!loading() && filtered().length === 0" class="py-5 text-center text-muted">
         <i class="bi bi-box-seam fs-1"></i>
         <div class="mt-2">No products found.</div>
     </div>
 
-    <!-- Grid -->
     <div class="row g-3" *ngIf="!loading() && filtered().length > 0">
         <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *ngFor="let p of filtered()">
             <app-product-card [product]="p" [disabled]="adding()" (add)="addToCart($event)">

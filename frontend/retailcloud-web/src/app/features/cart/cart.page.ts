@@ -3,157 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
 import { OrdersService } from '../../core/services/orders.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   standalone: true,
   selector: 'app-cart',
   imports: [CommonModule, RouterLink],
-  template: `
-    <div class="container py-4">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-          <h2 class="fw-bold mb-1">Cart</h2>
-          <div class="text-muted small">Review your items before checkout.</div>
-        </div>
-
-        <div class="d-flex gap-2">
-          <button class="btn btn-outline-dark" (click)="load()" [disabled]="loading()">
-            <i class="bi bi-arrow-clockwise me-1"></i> Refresh
-          </button>
-          <button class="btn btn-outline-danger" (click)="clear()" [disabled]="loading() || items().length===0">
-            <i class="bi bi-trash me-1"></i> Clear cart
-          </button>
-        </div>
-      </div>
-
-      <!-- Alerts -->
-      <div *ngIf="error()" class="alert alert-danger">
-        <strong>Error:</strong> {{ error() }}
-      </div>
-
-      <div *ngIf="toast()" class="alert alert-success">
-        {{ toast() }}
-      </div>
-
-      <!-- Loading -->
-      <div *ngIf="loading()" class="py-5 text-center text-muted">
-        <div class="spinner-border" role="status"></div>
-        <div class="mt-3">Loading cart...</div>
-      </div>
-
-      <!-- Empty -->
-      <div *ngIf="!loading() && items().length===0" class="py-5 text-center text-muted">
-        <i class="bi bi-cart-x fs-1"></i>
-        <div class="mt-2 fw-semibold">Your cart is empty</div>
-        <div class="small">Browse products and add items to your cart.</div>
-        <a class="btn btn-dark mt-3" routerLink="/products">
-          <i class="bi bi-bag me-1"></i> Go to Products
-        </a>
-      </div>
-
-      <!-- Content -->
-      <div class="row g-3" *ngIf="!loading() && items().length>0">
-        <!-- Items -->
-        <div class="col-lg-8">
-          <div class="card border-0 shadow-sm">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <div class="fw-semibold">Items</div>
-                <div class="text-muted small">{{ items().length }} item(s)</div>
-              </div>
-
-              <div class="table-responsive">
-                <table class="table align-middle mb-0">
-                  <thead>
-                    <tr class="text-muted small">
-                      <th style="width: 40%">Product</th>
-                      <th class="text-end">Price</th>
-                      <th class="text-end">Qty</th>
-                      <th class="text-end">Total</th>
-                      <th class="text-end"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let it of items()">
-                      <td>
-                        <div class="fw-semibold">{{ it.name || it.title || it.productId }}</div>
-                        <div class="text-muted small">ID: {{ it.productId }}</div>
-                      </td>
-
-                      <td class="text-end">\${{ money(it.price) }}</td>
-                      <td class="text-end">{{ it.qty }}</td>
-                      <td class="text-end fw-semibold">\${{ money((it.price ?? 0) * (it.qty ?? 0)) }}</td>
-
-                      <td class="text-end">
-                        <button class="btn btn-outline-danger btn-sm"
-                                (click)="remove(it.productId)"
-                                [disabled]="busy()">
-                          <i class="bi bi-x-lg"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div class="alert alert-info mt-3 mb-0 small">
-                <i class="bi bi-info-circle me-1"></i>
-                Quantity updates are not available in the Cart API. To change quantity, remove and add again from Products.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Summary -->
-        <div class="col-lg-4">
-          <div class="card border-0 shadow-sm">
-            <div class="card-body">
-              <div class="fw-semibold mb-3">Order Summary</div>
-
-              <div class="d-flex justify-content-between mb-2">
-                <div class="text-muted">Subtotal</div>
-                <div class="fw-semibold">\${{ money(subtotal()) }}</div>
-              </div>
-
-              <div class="d-flex justify-content-between mb-2">
-                <div class="text-muted">Estimated Tax</div>
-                <div class="text-muted">\${{ money(0) }}</div>
-              </div>
-
-              <hr />
-
-              <div class="d-flex justify-content-between mb-3">
-                <div class="fw-bold">Total</div>
-                <div class="fw-bold">\${{ money(subtotal()) }}</div>
-              </div>
-
-              <button class="btn btn-dark w-100"
-                      (click)="checkout()"
-                      [disabled]="busy() || items().length===0">
-                <i class="bi bi-bag-check me-1"></i>
-                Checkout
-              </button>
-
-              <button class="btn btn-outline-dark w-100 mt-2"
-                      routerLink="/products"
-                      [disabled]="busy()">
-                Continue shopping
-              </button>
-
-              <div class="text-muted small mt-3">
-                Demo mode: using <code>userId=U1001</code>
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="checkoutResult()" class="alert alert-success mt-3">
-            <div class="fw-semibold">Checkout successful ✅</div>
-            <div class="small text-muted">Redirecting to payment...</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
+  templateUrl: './cart.page.html',
 })
 export class CartPage {
   loading = signal(false);
@@ -171,7 +27,8 @@ export class CartPage {
   constructor(
     private cart: CartService,
     private orders: OrdersService,
-    private router: Router
+    private router: Router,
+    public auth: AuthService
   ) {
     this.load();
   }
@@ -183,17 +40,12 @@ export class CartPage {
 
     this.cart.getCart().subscribe({
       next: (res) => {
-        // Support response shapes:
-        // - { items: [...] }
-        // - { cartItems: [...] }
-        // - [...]
         const list =
           Array.isArray(res) ? res :
             Array.isArray((res as any)?.items) ? (res as any).items :
               Array.isArray((res as any)?.cartItems) ? (res as any).cartItems :
                 [];
 
-        // Normalize to make UI stable
         const normalized = list.map((it: any) => ({
           productId: it.productId ?? it.id,
           name: it.name ?? it.title,
@@ -222,7 +74,7 @@ export class CartPage {
       next: () => {
         this.items.set(this.items().filter(x => x.productId !== productId));
         this.busy.set(false);
-        this.toast.set('Item removed ✅');
+        this.toast.set('Item removed ');
         setTimeout(() => this.toast.set(null), 2000);
       },
       error: (e) => {
@@ -241,7 +93,7 @@ export class CartPage {
       next: () => {
         this.items.set([]);
         this.busy.set(false);
-        this.toast.set('Cart cleared ✅');
+        this.toast.set('Cart cleared ');
         setTimeout(() => this.toast.set(null), 2000);
       },
       error: (e) => {
@@ -252,6 +104,11 @@ export class CartPage {
   }
 
   checkout() {
+    if (!this.auth.isLoggedIn()) {
+      this.router.navigate(['/auth']);
+      return;
+    }
+
     this.busy.set(true);
     this.error.set(null);
     this.toast.set(null);
@@ -260,20 +117,17 @@ export class CartPage {
     this.orders.checkout().subscribe({
       next: (res) => {
         this.checkoutResult.set(res);
-        // After checkout, clear local UI and call clearCart API to keep consistent
         this.cart.clearCart().subscribe({ next: () => { } });
 
         this.items.set([]);
         this.busy.set(false);
 
-        // Get order ID from response
         const orderId = res?.order?.orderId;
 
         if (orderId) {
-          // Redirect to payment page with order ID
           setTimeout(() => this.router.navigate(['/payment', orderId]), 800);
         } else {
-          // Fallback to orders page if no order ID
+
           setTimeout(() => this.router.navigateByUrl('/orders'), 800);
         }
       },
